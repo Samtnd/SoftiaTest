@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Attestation{% endblock %}
+
+{% block body %}
+    <h1>Générer une nouvelle attestation</h1>
+
+    {# {{ include('attestation/_form.html.twig') }} #}
+    <form action="" method="post" class="form_new">
+    <div class="form_new">
+        <label for="etudiant_select">Etudiant : </label>
+            <select name="etudiant" id="etudiant" required>  
+                <option value="" disable selected> Choisissez un étudiant</option>
+                {% for etudiant in etudiants %}
+                    <option value="{{etudiant.id}}" name="{{etudiant.convention.id}}">{{ etudiant.nom }} {{ etudiant.prenom}}</option>
+                {% endfor %}
+            </select> 
+    </div>
+     <div class="form_new">
+        <label for="convention">Convention : </label>
+            <input type="text" name="convention" id="convention" disable></input> 
+    </div>
+    <div class="form_new">
+        <label for="message">Message : </label>
+            <textarea rows="10" cols="50" type="text" name="message" id="message"></textarea>
+
+    </div>
+    <button class="btn">{{ button_label|default('Enregistrer') }}</button>
+    </form>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script>
+            $(document).ready(function(){
+            $('#etudiant').change(function(){
+                //Selected value
+                var conventionID = $(this).find('option:selected').attr("name");
+                var etudiantName = $(this).find('option:selected').text()
+                $.get('convention/' + conventionID).then(function(data){
+                    $('#convention').val(data.nom);
+                    console.log(data);
+                    $('#message').val('Bonjour ' +  etudiantName + ',\n\n'+
+'Vous avez suivi ' + data.nbHeur + ' heures de formation chez FormationPlus.\n' +
+'Pouvez-vous nous retourner ce mail avec la pièce jointe signée.\n\n'+
+
+'Cordialement,\n'+
+'FormationPlus.');
+
+                });
+
+                
+            });
+        });
+    </script>
+
+    <a href="{{ path('app_attestation_index') }}">retour à la liste</a>
+{% endblock %}

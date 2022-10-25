@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Attestation index{% endblock %}
+
+{% block body %}
+    <h1>Attestation index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Etudiant</th>
+                <th>Convention</th>
+                <th>Message</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for attestation in attestations %}
+            <tr>
+                <td>{{ attestation.id }}</td>
+                <td>{{ attestation.etudiant }}</td>
+                <td>{{ attestation.convention }}</td>
+                <td>{{ attestation.message }}</td>
+                <td>
+                    <a href="{{ path('app_attestation_show', {'id': attestation.id}) }}">Voir</a>
+                    <a href="{{ path('app_attestation_edit', {'id': attestation.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">Pas d'attestations trouvées</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_attestation_new') }}">Générer une attestation</a>
+{% endblock %}
